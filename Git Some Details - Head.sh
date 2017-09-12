@@ -56,7 +56,7 @@ body_behind_small="${reset}${cyan}${bold}";
 body_behind_medium="${reset}${yellow}${bold}";
 body_behind_large="${reset}${red}${bold}";
 
-git for-each-ref refs/remotes/ --sort='-committerdate' --format='%(refname)|%(refname:lstrip=3)|%(authorname)|%(committerdate:relative)|%(committerdate:iso8601)' |
+git for-each-ref refs/heads/ --sort='-committerdate' --format='%(refname)|%(refname:lstrip=2)|%(authorname)|%(committerdate:relative)|%(committerdate:iso8601)' |
 while read refname refnameformatted authorname committerdaterelative committerdateiso8601; 
 do
   merged_into_master_value="ERROR"
@@ -74,7 +74,7 @@ do
   body_behind_develop_style="${reset}${bold}";
   body_ahead_develop_style="${reset}${bold}";
   
-  if git merge-base --is-ancestor $refname origin/master;
+  if git merge-base --is-ancestor $refname master;
   then
     merged_into_master_value="(Y)"
     merged_into_master_style="${green}"
@@ -83,7 +83,7 @@ do
     merged_into_master_style="${red}"
   fi
   
-  if git merge-base --is-ancestor $refname origin/develop;
+  if git merge-base --is-ancestor $refname develop;
   then
     merged_into_develop_value="(Y)"
     merged_into_develop_style="${green}"
@@ -99,10 +99,10 @@ do
     merged_into_develop_value=" - "
     merged_into_develop_style="${reset}${bold}"
   else 
-    body_behind_master_value=$(git rev-list --left-only --count origin/master...$refname)
-    body_ahead_master_value=$(git rev-list --right-only --count origin/master...$refname)
-    body_behind_develop_value=$(git rev-list --left-only --count origin/develop...$refname)
-    body_ahead_develop_value=$(git rev-list --right-only --count origin/develop...$refname)
+    body_behind_master_value=$(git rev-list --left-only --count master...$refname)
+    body_ahead_master_value=$(git rev-list --right-only --count master...$refname)
+    body_behind_develop_value=$(git rev-list --left-only --count develop...$refname)
+    body_ahead_develop_value=$(git rev-list --right-only --count develop...$refname)
 
     if (( $body_behind_master_value == 0 ));
     then
