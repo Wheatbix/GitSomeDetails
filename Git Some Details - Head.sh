@@ -89,18 +89,19 @@ do
     merged_into_develop_style="${red}"
   fi
   
-  if [ $refnameformatted == "master" ] || [ $refnameformatted == "develop" ];
+  if [ $refnameformatted == "master" ] || [ $refnameformatted == "develop" ]
   then
     merged_into_master_value=" - "
     merged_into_master_style="${reset}${bold}"
     merged_into_develop_value=" - "
     merged_into_develop_style="${reset}${bold}"
-  else 
+  fi
+  
+  if [ $refnameformatted != "master" ]
+  then
     body_behind_master_value=$(git rev-list --left-only --count master...$refname)
     body_ahead_master_value=$(git rev-list --right-only --count master...$refname)
-    body_behind_develop_value=$(git rev-list --left-only --count develop...$refname)
-    body_ahead_develop_value=$(git rev-list --right-only --count develop...$refname)
-
+    
     if (( $body_behind_master_value == 0 ));
     then
       body_behind_master_style="${body_behind_none}"
@@ -128,6 +129,12 @@ do
     then
       body_ahead_master_style="${body_behind_large}"
     fi
+  fi
+  
+  if [ $refnameformatted != "develop" ]
+  then
+    body_behind_develop_value=$(git rev-list --left-only --count develop...$refname)
+    body_ahead_develop_value=$(git rev-list --right-only --count develop...$refname)
     
     if (( $body_behind_develop_value == 0 ));
     then
@@ -157,6 +164,75 @@ do
       body_ahead_develop_style="${body_behind_large}"
     fi
   fi
+  
+  #if [ $refnameformatted == "master" ] || [ $refnameformatted == "develop" ];
+  #then
+  #  merged_into_master_value=" - "
+  #  merged_into_master_style="${reset}${bold}"
+  #  merged_into_develop_value=" - "
+  #  merged_into_develop_style="${reset}${bold}"
+  #else 
+  #  body_behind_master_value=$(git rev-list --left-only --count master...$refname)
+  #  body_ahead_master_value=$(git rev-list --right-only --count master...$refname)
+  #  body_behind_develop_value=$(git rev-list --left-only --count develop...$refname)
+  #  body_ahead_develop_value=$(git rev-list --right-only --count develop...$refname)
+  #
+  #  if (( $body_behind_master_value == 0 ));
+  #  then
+  #    body_behind_master_style="${body_behind_none}"
+  #  elif (( $body_behind_master_value > 0 )) && (( $body_behind_master_value < 10 ));
+  #  then
+  #    body_behind_master_style="${body_behind_small}"
+  #  elif (( $body_behind_master_value > 10 )) && (( $body_behind_master_value < 50 ));
+  #  then
+  #    body_behind_master_style="${body_behind_medium}"
+  #  elif (( $body_behind_master_value > 50 ));
+  #  then
+  #    body_behind_master_style="${body_behind_large}"
+  #  fi
+  #  
+  #  if (( $body_ahead_master_value == 0 ));
+  #  then
+  #    body_ahead_master_style="${body_behind_none}"
+  #  elif (( $body_ahead_master_value > 0 )) && (( $body_ahead_master_value < 10 ));
+  #  then
+  #    body_ahead_master_style="${body_behind_small}"
+  #  elif (( $body_ahead_master_value > 10 )) && (( $body_ahead_master_value < 50 ));
+  #  then
+  #    body_ahead_master_style="${body_behind_medium}"
+  #  elif (( $body_ahead_master_value > 50 ));
+  #  then
+  #    body_ahead_master_style="${body_behind_large}"
+  #  fi
+  #  
+  #  if (( $body_behind_develop_value == 0 ));
+  #  then
+  #    body_behind_develop_style="${body_behind_none}"
+  #  elif (( $body_behind_develop_value > 0 )) && (( $body_behind_develop_value < 10 ));
+  #  then
+  #    body_behind_develop_style="${body_behind_small}"
+  #  elif (( $body_behind_develop_value > 10 )) && (( $body_behind_develop_value < 50 ));
+  #  then
+  #    body_behind_develop_style="${body_behind_medium}"
+  #  elif (( $body_behind_develop_value > 50 ));
+  #  then
+  #    body_behind_develop_style="${body_behind_large}"
+  #  fi
+  #  
+  #  if (( $body_ahead_develop_value == 0 ));
+  #  then
+  #    body_ahead_develop_style="${body_behind_none}"
+  #  elif (( $body_ahead_develop_value > 0 )) && (( $body_ahead_develop_value < 10 ));
+  #  then
+  #    body_ahead_develop_style="${body_behind_small}"
+  #  elif (( $body_ahead_develop_value > 10 )) && (( $body_ahead_develop_value < 50 ));
+  #  then
+  #    body_ahead_develop_style="${body_behind_medium}"
+  #  elif (( $body_ahead_develop_value > 50 ));
+  #  then
+  #    body_ahead_develop_style="${body_behind_large}"
+  #  fi
+  #fi
   
   if (( $count == 0 ));
   then
